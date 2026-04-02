@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 48 33% 98%;
+    --foreground: 222 47% 11%;
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+    --primary: 43 100% 50%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 160 84% 31%;
+    --secondary-foreground: 151 81% 96%;
+    --muted: 40 17% 96%;
+    --muted-foreground: 215 16% 47%;
+    --accent: 151 55% 95%;
+    --accent-foreground: 160 84% 22%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 30 12% 88%;
+    --input: 30 12% 88%;
+    --ring: 160 84% 31%;
+    --radius: 1rem;
+    --brand-amber-400: 255 183 0;
+    --brand-amber-500: 245 163 0;
+    --brand-emerald-500: 16 185 129;
+    --brand-emerald-600: 5 150 105;
+    --brand-stone-50: 250 250 249;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+    --card: 222 47% 11%;
+    --card-foreground: 210 40% 98%;
+    --popover: 222 47% 11%;
+    --popover-foreground: 210 40% 98%;
+    --primary: 39 100% 50%;
+    --primary-foreground: 222 47% 11%;
+    --secondary: 160 84% 39%;
+    --secondary-foreground: 210 40% 98%;
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 160 25% 18%;
+    --accent-foreground: 151 81% 96%;
+    --destructive: 0 62% 50%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 217 26% 22%;
+    --input: 217 26% 22%;
+    --ring: 160 84% 39%;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+    background-image:
+      radial-gradient(circle at top, rgba(var(--brand-amber-400), 0.10), transparent 20%),
+      radial-gradient(circle at bottom right, rgba(var(--brand-emerald-600), 0.12), transparent 24%);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply tracking-tight text-slate-900 dark:text-slate-50;
+  }
+
+  p {
+    @apply text-slate-600 dark:text-slate-300;
+  }
+
+  ::selection {
+    @apply bg-amber-300 text-slate-950;
+  }
+}
+
+@layer components {
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500 focus-visible:ring-offset-2 focus-visible:ring-offset-background;
+  }
+
+  .cta-primary {
+    @apply focus-ring inline-flex items-center justify-center rounded-full border border-[rgba(180,83,9,0.2)] bg-amber-400 px-5 py-3 text-sm font-semibold text-slate-900 shadow-soft transition duration-200 hover:-translate-y-0.5 hover:bg-amber-300 hover:shadow-lift active:translate-y-0;
+  }
+
+  .cta-secondary {
+    @apply focus-ring inline-flex items-center justify-center rounded-full bg-emerald-600 px-5 py-3 text-sm font-semibold text-emerald-50 shadow-soft transition duration-200 hover:-translate-y-0.5 hover:bg-emerald-500 hover:shadow-lift active:translate-y-0;
+  }
+
+  .surface {
+    @apply rounded-3xl border border-white/70 bg-white/90 shadow-soft backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .safe-bottom {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+
