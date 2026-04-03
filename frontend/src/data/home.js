@@ -52,10 +52,12 @@ export const serviceHighlights = [
 ]
 
 export const shortcutCategories = [
-  { id: 'sc-1', label: 'Clothing', icon: 'C', color: 'bg-rose-50', description: 'Soft layers, dresses, and everyday staples.', href: '/shop' },
-  { id: 'sc-2', label: 'Footwear', icon: 'F', color: 'bg-sky-50', description: 'Comfort-first pairs for daily movement.', href: '/shop' },
-  { id: 'sc-3', label: 'Accessories', icon: 'A', color: 'bg-amber-50', description: 'Bags, jewelry, and finishing details.', href: '/shop' },
-  { id: 'sc-4', label: 'Home', icon: 'H', color: 'bg-emerald-50', description: 'Useful pieces for calm, organized spaces.', href: '/shop' },
+  { id: 'sc-1', label: 'Electronics and Gadgets', icon: 'devices', productCount: 11, href: '/shop' },
+  { id: 'sc-2', label: 'Health and Beauty', icon: 'beauty', productCount: 3, href: '/shop' },
+  { id: 'sc-3', label: 'Baby and Kids', icon: 'kids', productCount: 8, href: '/shop' },
+  { id: 'sc-4', label: 'Home Living Essentials', icon: 'kitchen', productCount: 10, href: '/shop' },
+  { id: 'sc-5', label: 'Luxury Self Care', icon: 'spa', productCount: 32, href: '/shop' },
+  { id: 'sc-6', label: 'Home Decor', icon: 'decor', productCount: 2, href: '/shop' },
 ]
 
 export const recentPurchases = [

@@ -2,8 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { ChevronDown, Heart, LogIn, Menu, Search, ShoppingBag, Sparkles, UserCircle2, X } from 'lucide-react'
+import { ArrowRight, ChevronDown, Heart, LogIn, Menu, Search, ShoppingBag, Sparkles, UserCircle2, X } from 'lucide-react'
 import { ThemeToggle } from '@/components/layout/ThemeToggle'
+import { TopBanner } from '@/components/layout/TopBanner'
 import { navigation } from '@/lib/config/navigation'
 import { useCartStore } from '@/lib/store/cart-store'
 import useAuth from '@/hooks/useAuth'
@@ -31,6 +32,7 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-stone-200/70 bg-stone-50/95 backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/90">
+      <TopBanner />
       <div className="container">
         <div className="flex min-h-20 items-center gap-3">
           <button
@@ -67,40 +69,74 @@ export function SiteHeader() {
                   aria-expanded={activeMenu === item.title}
                 >
                   {item.title}
-                  <ChevronDown className="h-4 w-4" />
+                  <ChevronDown className={`h-4 w-4 transition ${activeMenu === item.title ? 'rotate-180' : ''}`} />
                 </button>
 
                 {activeMenu === item.title ? (
-                  <div className="absolute left-0 top-full pt-3">
-                    <div className="surface grid w-[820px] grid-cols-[0.95fr_1.05fr] gap-6 p-6">
-                      <div>
-                        <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">{item.eyebrow}</p>
-                        <h2 className="mt-2 text-2xl font-semibold">{item.title}</h2>
-                        <p className="mt-2 text-sm">{item.description}</p>
-                        <div className="mt-5 rounded-[1.75rem] bg-gradient-to-br from-amber-200 via-amber-100 to-emerald-100 p-5">
-                          <p className="text-sm font-semibold text-slate-900">{item.featuredTitle}</p>
-                          <p className="mt-2 text-sm text-slate-700">{item.featuredDescription}</p>
-                          <div className="mt-5 grid gap-3 sm:grid-cols-2">
-                            <Link href="/shop" className="rounded-[1.25rem] bg-white/80 px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-white">Shop collection</Link>
-                            <Link href="/checkout" className="rounded-[1.25rem] bg-slate-900 px-4 py-3 text-sm font-semibold text-white transition hover:bg-slate-800">Start checkout</Link>
+                  <div className="absolute left-0 top-full pt-4">
+                    <div className="w-[880px] overflow-hidden rounded-[2rem] border border-stone-200/80 bg-white/95 shadow-[0_24px_80px_rgba(15,23,42,0.16)] backdrop-blur-xl dark:border-slate-800 dark:bg-slate-950/95">
+                      <div className="h-1.5 bg-gradient-to-r from-amber-300 via-emerald-400 to-emerald-600" />
+                      <div className="grid grid-cols-[1.05fr_1.15fr] gap-0">
+                        <div className="border-r border-stone-200/80 bg-gradient-to-br from-stone-50 via-white to-amber-50/60 p-7 dark:border-slate-800 dark:from-slate-950 dark:via-slate-950 dark:to-emerald-950/20">
+                          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">{item.eyebrow}</p>
+                          <h2 className="mt-3 text-[2rem] font-semibold leading-none">{item.title}</h2>
+                          <p className="mt-3 max-w-sm text-sm leading-6">{item.description}</p>
+
+                          <div className="mt-6 rounded-[1.75rem] border border-white/70 bg-gradient-to-br from-slate-950 via-slate-900 to-emerald-950 p-5 text-white shadow-soft dark:border-white/10">
+                            <div className="flex items-center justify-between gap-4">
+                              <div>
+                                <p className="text-[11px] font-semibold uppercase tracking-[0.24em] text-emerald-200/90">Featured</p>
+                                <p className="mt-2 text-xl font-semibold text-white">{item.featuredTitle}</p>
+                              </div>
+                              <div className="rounded-full bg-white/10 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-200">
+                                Fresh pick
+                              </div>
+                            </div>
+                            <p className="mt-3 max-w-sm text-sm leading-6 text-slate-200">{item.featuredDescription}</p>
+                            <div className="mt-5 flex flex-wrap gap-2">
+                              <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/90">Thoughtful edits</span>
+                              <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/90">Fast discovery</span>
+                              <span className="rounded-full border border-white/10 bg-white/10 px-3 py-1.5 text-xs font-medium text-white/90">Clean layout</span>
+                            </div>
+                            <div className="mt-6 flex gap-3">
+                              <Link href="/shop" className="inline-flex items-center gap-2 rounded-full bg-white px-4 py-3 text-sm font-semibold text-slate-950 transition hover:bg-amber-100">
+                                Shop collection
+                                <ArrowRight className="h-4 w-4" />
+                              </Link>
+                              <Link href="/checkout" className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-4 py-3 text-sm font-semibold text-white transition hover:bg-white/15">
+                                Start checkout
+                              </Link>
+                            </div>
                           </div>
                         </div>
-                      </div>
-                      <div className="grid gap-3 sm:grid-cols-2">
-                        {item.links.map((link) => (
-                          <Link
-                            key={link.label}
-                            href={link.href}
-                            className="rounded-[1.5rem] border border-stone-200 bg-stone-50 p-4 transition hover:-translate-y-0.5 hover:border-amber-300 hover:bg-white dark:border-slate-800 dark:bg-slate-900 dark:hover:border-emerald-700"
-                          >
-                            <div className="flex items-start justify-between gap-3">
-                              <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">{link.label}</p>
-                              <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">{link.badge}</span>
-                            </div>
-                            <p className="mt-1 text-sm">{link.description}</p>
-                            <div className="mt-4 rounded-[1rem] bg-white px-3 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 dark:bg-slate-950 dark:text-slate-400">Open page</div>
-                          </Link>
-                        ))}
+
+                        <div className="bg-stone-50/80 p-4 dark:bg-slate-900/40">
+                          <div className="grid gap-3 sm:grid-cols-2">
+                            {item.links.map((link, index) => (
+                              <Link
+                                key={link.label}
+                                href={link.href}
+                                className={`group rounded-[1.5rem] border p-4 transition duration-200 hover:-translate-y-0.5 ${
+                                  index === 0
+                                    ? 'border-amber-200 bg-gradient-to-br from-amber-100 via-white to-white hover:border-amber-300 dark:border-amber-900/50 dark:from-amber-950/40 dark:via-slate-900 dark:to-slate-900'
+                                    : 'border-stone-200/80 bg-white hover:border-emerald-300 hover:bg-white dark:border-slate-800 dark:bg-slate-950 dark:hover:border-emerald-700'
+                                }`}
+                              >
+                                <div className="flex items-start justify-between gap-3">
+                                  <span className="rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-[0.16em] text-emerald-700 dark:bg-emerald-950/40 dark:text-emerald-300">
+                                    {link.badge}
+                                  </span>
+                                  <ArrowRight className="h-4 w-4 text-slate-400 transition group-hover:translate-x-0.5 group-hover:text-slate-700 dark:group-hover:text-slate-200" />
+                                </div>
+                                <p className="mt-6 text-base font-semibold text-slate-900 dark:text-slate-50">{link.label}</p>
+                                <p className="mt-2 text-sm leading-6">{link.description}</p>
+                                <div className="mt-6 text-[11px] font-semibold uppercase tracking-[0.18em] text-slate-400 dark:text-slate-500">
+                                  Explore section
+                                </div>
+                              </Link>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>

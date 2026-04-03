@@ -101,6 +101,16 @@
   .surface {
     @apply rounded-3xl border border-white/70 bg-white/90 shadow-soft backdrop-blur-sm dark:border-slate-800 dark:bg-slate-900/90;
   }
+
+  .home-page h1,
+  .home-page h2,
+  .home-page h3 {
+    @apply font-bold tracking-tight;
+  }
+
+  .home-page p {
+    @apply font-medium leading-7;
+  }
 }
 
 @layer utilities {

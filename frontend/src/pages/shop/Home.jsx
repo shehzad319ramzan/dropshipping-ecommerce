@@ -9,7 +9,7 @@ import { StorefrontShell } from '@/components/layout/StorefrontShell'
 
 const Home = () => (
   <StorefrontShell>
-    <main className="min-h-screen bg-stone-50 dark:bg-slate-950">
+    <main className="home-page min-h-screen bg-stone-50 dark:bg-slate-950">
       <ShopPulseBar />
       <HeroSlider />
       <ServiceStrip />
