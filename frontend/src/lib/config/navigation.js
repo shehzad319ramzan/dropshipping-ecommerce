@@ -1,106 +1,76 @@
 export const navigation = [
   {
     title: 'Shop',
-    eyebrow: 'Curated collections',
-    description:
-      'Seasonal assortments built for everyday movement and cleaner routines.',
-    featuredTitle: 'Spring utility edit',
-    featuredDescription:
-      'Weather-smart layers, soft texture, and lightweight travel picks.',
     links: [
       {
-        label: 'New arrivals',
-        description: 'Fresh product drops with modern earthy colorways.',
+        label: 'Dog Food & Treats',
+        description: 'Nutritious food and healthy treats for your dog',
         href: '/shop',
-        badge: 'New',
       },
       {
-        label: 'Best sellers',
-        description: 'Top-rated staples customers come back for.',
+        label: 'Cat Supplies',
+        description: 'Everything your cat needs for a happy life',
         href: '/shop',
-        badge: 'Popular',
       },
       {
-        label: 'Eco essentials',
-        description: 'Lower-impact materials with traceable sourcing stories.',
+        label: 'Pet Toys & Play',
+        description: 'Fun and safe toys for all types of pets',
         href: '/shop',
-        badge: 'Eco',
       },
       {
-        label: 'Travel layers',
-        description: 'Packable outerwear and lounge-ready pieces for movement.',
+        label: 'Pet Health & Wellness',
+        description: 'Vitamins, supplements, and health products',
         href: '/shop',
-        badge: 'Edit',
       },
     ],
   },
   {
-    title: 'Discover',
-    eyebrow: 'Brand experience',
-    description:
-      'Story-led landing points that make browsing feel premium, not crowded.',
-    featuredTitle: 'Material library',
-    featuredDescription:
-      'Explore recycled knits, plant-based finishes, and compostable packaging.',
+    title: 'Pet Care',
     links: [
       {
-        label: 'Journal',
-        description: 'Editorial storytelling and lifestyle inspiration.',
-        href: '/',
-        badge: 'Read',
-      },
-      {
-        label: 'Sustainability',
-        description: 'Carbon, packaging, and sourcing details at a glance.',
-        href: '/',
-        badge: 'Trust',
-      },
-      {
-        label: 'Fit guide',
-        description: 'Find your best match with size and wear notes.',
+        label: 'Grooming Supplies',
+        description: 'Shampoos, brushes, and grooming tools',
         href: '/shop',
-        badge: 'Guide',
       },
       {
-        label: 'Gift guide',
-        description: 'A cleaner gifting edit for easy seasonal shopping.',
+        label: 'Pet Beds & Furniture',
+        description: 'Comfortable beds and stylish furniture',
         href: '/shop',
-        badge: 'Seasonal',
+      },
+      {
+        label: 'Collars & Leashes',
+        description: 'Walking essentials and ID tags',
+        href: '/shop',
+      },
+      {
+        label: 'Pet Bowls & Feeders',
+        description: 'Feeding solutions and water fountains',
+        href: '/shop',
       },
     ],
   },
   {
     title: 'About',
-    eyebrow: 'Trust & support',
-    description:
-      'Support content, guarantees, and policies surfaced like a premium DTC brand.',
-    featuredTitle: 'Why customers stay',
-    featuredDescription:
-      'Fast delivery, easy returns, and clear fit guidance reduce checkout hesitation.',
     links: [
       {
-        label: 'Shipping & returns',
-        description: 'Clear post-purchase expectations and support.',
+        label: 'Shipping & Returns',
+        description: 'Delivery options and return policy',
         href: '/',
-        badge: 'Support',
       },
       {
-        label: 'Careers',
-        description: 'Join the team building lighter living products.',
+        label: 'Contact Us',
+        description: 'Get help from our pet care team',
         href: '/',
-        badge: 'Team',
       },
       {
-        label: 'Contact',
-        description: 'Talk to support, styling, or wholesale.',
+        label: 'Pet Care Tips',
+        description: 'Expert advice and pet care guides',
         href: '/',
-        badge: 'Help',
       },
       {
-        label: 'Our story',
-        description: 'The design philosophy behind a tighter, more useful store.',
+        label: 'Our Story',
+        description: 'Why we love pets as much as you do',
         href: '/',
-        badge: 'Brand',
       },
     ],
   },

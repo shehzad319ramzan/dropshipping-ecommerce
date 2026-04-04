@@ -2,25 +2,41 @@ import Link from 'next/link'
 import { Instagram, Leaf, ShieldCheck, Truck } from 'lucide-react'
 
 const footerColumns = [
-  { title: 'Shop', links: ['New Arrivals', 'Best Sellers', 'Gift Cards', 'Sustainability'] },
-  { title: 'Support', links: ['Shipping', 'Returns', 'Fit Guide', 'Contact'] },
-  { title: 'Company', links: ['About', 'Materials', 'Journal', 'Careers'] },
+  {
+    title: 'Shop',
+    links: [
+      { label: 'New Arrivals', href: '/new-arrivals' },
+      { label: 'Best Sellers', href: '/best-sellers' },
+      { label: 'Gift Cards', href: '/gift-cards' },
+      { label: 'Sustainability', href: '/sustainability' },
+    ],
+  },
+  {
+    title: 'Support',
+    links: [
+      { label: 'Support', href: '/support' },
+      { label: 'Shipping', href: '/shipping' },
+      { label: 'Returns', href: '/returns' },
+      { label: 'Fit Guide', href: '/fit-guide' },
+    ],
+  },
+  {
+    title: 'Company',
+    links: [
+      { label: 'Contact', href: '/contact' },
+      { label: 'Company', href: '/company' },
+      { label: 'About', href: '/about' },
+      { label: 'Materials', href: '/materials' },
+      { label: 'Journal', href: '/journal' },
+    ],
+  },
 ]
 
 export function SiteFooter() {
   return (
     <footer className="border-t border-stone-200 bg-white dark:border-slate-800 dark:bg-slate-950">
       <div className="container py-14">
-        <div className="grid gap-8 rounded-[2rem] bg-slate-900 p-8 text-slate-50 lg:grid-cols-[1.2fr_0.8fr]">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.22em] text-amber-300">Verdant Goods</p>
-            <h2 className="mt-3 max-w-xl text-3xl font-semibold text-white">
-              Designed for everyday momentum, made with lower-impact materials.
-            </h2>
-            <p className="mt-4 max-w-lg text-slate-300">
-              Premium product storytelling, clear trust signals, and accessible storefront interactions start here.
-            </p>
-          </div>
+        <div className="grid gap-8 rounded-[2rem] bg-slate-900 p-8 text-slate-50">
           <div className="grid gap-3 sm:grid-cols-3">
             {[
               { icon: Truck, label: 'Free shipping', meta: 'Orders $120+' },
@@ -45,8 +61,12 @@ export function SiteFooter() {
                 </h3>
                 <div className="mt-4 space-y-3">
                   {column.links.map((link) => (
-                    <Link key={link} href="/" className="block text-sm text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400">
-                      {link}
+                    <Link
+                      key={link.label}
+                      href={link.href}
+                      className="block text-sm text-slate-600 transition hover:text-emerald-600 dark:text-slate-300 dark:hover:text-emerald-400"
+                    >
+                      {link.label}
                     </Link>
                   ))}
                 </div>

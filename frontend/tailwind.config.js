@@ -19,20 +19,39 @@ module.exports = {
     extend: {
       colors: {
         brand: {
-          amber: {
-            400: '#FFB700',
-            500: '#F5A300',
+          primary: {
+            DEFAULT: '#FFB200',
+            light: '#FFC233',
+            dark: '#E6A100',
             foreground: '#0F172A',
-            border: 'rgba(180, 83, 9, 0.2)',
           },
-          emerald: {
-            500: '#10B981',
-            600: '#059669',
-            foreground: '#ECFDF5',
+          secondary: {
+            DEFAULT: '#F66721',
+            light: '#F77A3D',
+            dark: '#DD5D1E',
           },
-          stone: {
-            50: '#FAFAF9',
+          green: {
+            DEFAULT: '#10B881',
+            light: '#34C497',
+            dark: '#0EA273',
           },
+        },
+        amber: {
+          300: '#FFD166',
+          400: '#FFB200',
+          500: '#F59E0B',
+          600: '#E6A100',
+        },
+        orange: {
+          400: '#F66721',
+          500: '#F66721',
+          600: '#DD5D1E',
+        },
+        emerald: {
+          300: '#34C497',
+          400: '#10B881',
+          500: '#10B881',
+          600: '#0EA273',
         },
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
@@ -79,7 +98,7 @@ module.exports = {
       },
       backgroundImage: {
         'hero-radial':
-          'radial-gradient(circle at top left, rgba(255, 183, 0, 0.28), transparent 35%), radial-gradient(circle at bottom right, rgba(5, 150, 105, 0.24), transparent 40%)',
+          'radial-gradient(circle at top left, rgba(255, 178, 0, 0.28), transparent 35%), radial-gradient(circle at bottom right, rgba(16, 184, 129, 0.24), transparent 40%)',
       },
       keyframes: {
         float: {

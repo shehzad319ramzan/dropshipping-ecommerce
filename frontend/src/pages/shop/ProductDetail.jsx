@@ -2,14 +2,22 @@
 
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ArrowRight, Leaf, ShieldCheck, Star } from 'lucide-react'
+import { ArrowRight, Star } from 'lucide-react'
+import { useState } from 'react'
 import { StorefrontShell } from '@/components/layout/StorefrontShell'
 import { ProductGallery } from '@/components/product/ProductGallery'
 import { ProductPurchasePanel } from '@/components/product/ProductPurchasePanel'
 import { getProductBySlug, getRelatedProducts } from '@/lib/catalog'
 
+const reviewTabs = [
+  { id: 'details', label: 'Product details' },
+  { id: 'reviews', label: 'Customer reviews' },
+  { id: 'materials', label: 'Materials' },
+]
+
 const ProductDetail = ({ slug }) => {
   const router = useRouter()
+  const [activeTab, setActiveTab] = useState('details')
   const product = getProductBySlug(slug)
 
   if (!product) {
@@ -17,6 +25,8 @@ const ProductDetail = ({ slug }) => {
     return null
   }
 
+  const reviews = product.reviews ?? []
+  const breakdown = product.reviewBreakdown ?? []
   const relatedProducts = getRelatedProducts(product.slug, product.category)
 
   return (
@@ -38,68 +48,117 @@ const ProductDetail = ({ slug }) => {
         </section>
 
         <section className="container pb-10">
-          <div className="grid gap-6 xl:grid-cols-[1fr_0.9fr]">
-            <div className="surface p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">Why it stands out</p>
-              <h2 className="mt-3 text-3xl font-semibold">A product page built around confidence.</h2>
-              <p className="mt-4 text-base">{product.longDescription}</p>
-              <div className="mt-6 grid gap-3 sm:grid-cols-3">
-                {product.highlights.map((highlight) => (
-                  <div key={highlight} className="rounded-[1.5rem] bg-stone-50 p-4 text-sm font-medium dark:bg-slate-950">{highlight}</div>
-                ))}
-              </div>
-            </div>
-            <div className="surface p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">Fit and feel</p>
-              <div className="mt-4 space-y-3">
-                {product.fitNotes.map((note) => (
-                  <div key={note} className="rounded-[1.25rem] border border-stone-200 bg-white p-4 text-sm dark:border-slate-800 dark:bg-slate-950">{note}</div>
-                ))}
-              </div>
-              <div className="mt-6 rounded-[1.5rem] bg-amber-50 p-5 dark:bg-amber-400/10">
-                <div className="flex items-start gap-3">
-                  <ShieldCheck className="mt-0.5 h-5 w-5 text-emerald-600" />
+          <div className="surface p-6 sm:p-8">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">Customer reviews</p>
+                <div className="mt-2 flex items-end gap-4">
+                  <span className="text-4xl font-semibold leading-none text-slate-900 dark:text-slate-50">{product.rating.toFixed(1)}</span>
                   <div>
-                    <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">How it fits</p>
-                    <p className="mt-1 text-sm">Most customers say this style feels true to size with a little room for layering.</p>
+                    <p className="text-sm font-semibold text-slate-500 dark:text-slate-300">Average rating</p>
+                    <p className="text-xs text-slate-400">{product.reviewCount} verified reviews</p>
                   </div>
                 </div>
+                <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">
+                  Temu-style review confidence with aggregated feedback and verified buyers.
+                </p>
               </div>
-            </div>
-          </div>
-        </section>
-
-        <section className="container pb-10">
-          <div className="grid gap-6 xl:grid-cols-[0.95fr_1.05fr]">
-            <div className="rounded-[2rem] bg-slate-900 p-6 text-white sm:p-8">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-amber-300">
-                <Leaf className="h-4 w-4" />
-                Sustainability
-              </div>
-              <h2 className="mt-4 text-3xl font-semibold text-white">Transparent material and packaging details.</h2>
-              <p className="mt-4 text-slate-300">{product.sustainability.carbon}</p>
-              <p className="mt-3 text-slate-300">{product.sustainability.packaging}</p>
-              <div className="mt-6 flex flex-wrap gap-2">
-                {product.sustainability.certifications.map((item) => (
-                  <span key={item} className="rounded-full border border-white/15 bg-white/8 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-white">{item}</span>
+              <div className="flex flex-wrap gap-3">
+                {reviewTabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    type="button"
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-[0.3em] transition ${
+                      activeTab === tab.id
+                        ? 'border-transparent bg-slate-900 text-white shadow-lg dark:bg-slate-50 dark:text-slate-900'
+                        : 'border-slate-200 text-slate-500 hover:border-slate-400 dark:border-slate-800 dark:text-slate-300'
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
                 ))}
               </div>
             </div>
 
-            <div className="surface p-6 sm:p-8">
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">Materials</p>
-              <div className="mt-5 grid gap-3 sm:grid-cols-3">
-                {product.materials.map((material) => (
-                  <div key={material} className="rounded-[1.5rem] border border-stone-200 bg-white p-4 text-sm font-medium dark:border-slate-800 dark:bg-slate-950">{material}</div>
-                ))}
-              </div>
-              <div className="mt-6 rounded-[1.5rem] bg-stone-50 p-5 dark:bg-slate-950">
-                <div className="flex items-center gap-2 text-sm text-slate-600 dark:text-slate-300">
-                  <Star className="h-4 w-4 fill-amber-400 text-amber-400" />
-                  <span className="font-semibold text-slate-900 dark:text-slate-50">{product.rating}</span>
-                  <span>Average review score from {product.reviewCount} verified reviews</span>
+            <div className="mt-6 space-y-6">
+              {activeTab === 'details' && (
+                <>
+                  <p className="text-sm text-slate-600 dark:text-slate-300">{product.longDescription}</p>
+                  <div className="grid gap-3 sm:grid-cols-3">
+                    {product.highlights.map((highlight) => (
+                      <div
+                        key={highlight}
+                        className="rounded-[1.5rem] border border-stone-200 bg-white p-4 text-sm font-semibold text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50"
+                      >
+                        {highlight}
+                      </div>
+                    ))}
+                  </div>
+                </>
+              )}
+
+              {activeTab === 'reviews' && (
+                <div className="space-y-6">
+                  <div className="grid gap-3 md:grid-cols-3">
+                    {breakdown.map((item) => (
+                      <div key={item.label} className="rounded-[1.5rem] border border-stone-200 bg-white p-4 text-sm dark:border-slate-800 dark:bg-slate-950">
+                        <p className="text-xs uppercase text-slate-400 dark:text-slate-500">{item.label}</p>
+                        <div className="mt-3 flex items-center gap-3">
+                          <span className="text-lg font-semibold text-slate-900 dark:text-slate-50">{item.percent}%</span>
+                          <div className="h-1 w-full rounded-full bg-slate-100 dark:bg-slate-800">
+                            <span
+                              className="block h-1 rounded-full bg-amber-400"
+                              style={{ width: `${item.percent}%` }}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="space-y-4">
+                    {reviews.map((review) => (
+                      <div
+                        key={review.id}
+                        className="rounded-[1.5rem] border border-stone-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-950"
+                      >
+                        <div className="flex items-center justify-between">
+                          <div>
+                            <p className="font-semibold text-slate-900 dark:text-white">{review.author}</p>
+                            <p className="text-xs text-slate-500">{review.date}</p>
+                          </div>
+                          <div className="inline-flex items-center gap-1 rounded-full bg-amber-50 px-3 py-1 text-amber-600">
+                            <Star className="h-4 w-4" />
+                            <span className="text-sm font-semibold">{review.rating.toFixed(1)}</span>
+                          </div>
+                        </div>
+                        <p className="mt-3 text-lg font-semibold text-slate-900 dark:text-slate-50">{review.title}</p>
+                        <p className="mt-2 text-sm text-slate-500 dark:text-slate-300">{review.body}</p>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      className="inline-flex w-full items-center justify-center rounded-[1.5rem] border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-900 transition hover:border-slate-500 dark:border-slate-700 dark:text-slate-50"
+                    >
+                      Write a review
+                    </button>
+                  </div>
                 </div>
-              </div>
+              )}
+
+              {activeTab === 'materials' && (
+                <div className="grid gap-3 md:grid-cols-3">
+                  {product.materials.map((material) => (
+                    <div
+                      key={material}
+                      className="rounded-[1.5rem] border border-stone-200 bg-white p-4 text-sm font-semibold text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50"
+                    >
+                      {material}
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>
@@ -107,8 +166,9 @@ const ProductDetail = ({ slug }) => {
         <section className="container pb-16">
           <div className="mb-6 flex items-end justify-between gap-4">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">Related products</p>
-              <h2 className="mt-2 text-3xl font-semibold">Complete the story</h2>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-emerald-600">Product listing</p>
+              <h2 className="mt-2 text-3xl font-semibold">Similar items you might love</h2>
+              <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">Shop the rest of the curated collection without leaving the page.</p>
             </div>
             <Link href="/shop" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-700 hover:text-emerald-600 dark:text-slate-200 dark:hover:text-emerald-400">
               Back to shop

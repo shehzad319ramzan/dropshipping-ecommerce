@@ -1,86 +1,110 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import Link from 'next/link'
-import { AnimatePresence, motion } from 'framer-motion'
-import { ArrowLeft, ArrowRight, Sparkles, Tag } from 'lucide-react'
-import { heroSlides } from '@/data/home'
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { heroSlides } from '@/data/home';
 
 export function HeroSlider() {
-  const [activeIndex, setActiveIndex] = useState(0)
+  const [idx, setIdx] = useState(0);
 
   useEffect(() => {
-    const interval = window.setInterval(() => {
-      setActiveIndex((current) => (current + 1) % heroSlides.length)
-    }, 5000)
+    const t = setInterval(() => setIdx(i => (i + 1) % heroSlides.length), 5000);
+    return () => clearInterval(t);
+  }, []);
 
-    return () => window.clearInterval(interval)
-  }, [])
+  const s = heroSlides[idx];
 
-  const activeSlide = heroSlides[activeIndex]
-  const isEmerald = activeSlide.accent === 'emerald'
+  const getOverlay = (accent) => {
+    if (accent === 'emerald') return 'from-black/70 via-black/40 to-transparent'; // keeping dark theme for readability as requested by design
+    if (accent === 'amber') return 'from-black/75 via-black/35 to-transparent';
+    return 'from-black/70 via-black/40 to-transparent';
+  };
 
   return (
-    <section className="relative overflow-hidden bg-gradient-to-r from-emerald-600 via-emerald-500 to-teal-600 text-white">
-      <div className="container py-10 sm:py-14 lg:py-16">
-        <div className="grid items-center gap-10 lg:grid-cols-[0.92fr_1.08fr]">
+    <div className="relative w-full overflow-hidden" style={{ height: 'clamp(400px, 55vw, 620px)' }}>
+      {/* Background images */}
+      <AnimatePresence mode="wait">
+        <motion.img
+          key={idx + '-bg'}
+          src={s.image}
+          alt={s.title}
+          initial={{ opacity: 0, scale: 1.06 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.98 }}
+          transition={{ duration: 0.7, ease: 'easeInOut' }}
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+      </AnimatePresence>
+
+      {/* Gradient overlay */}
+      <div className={`absolute inset-0 bg-gradient-to-r ${getOverlay(s.accent)}`} />
+
+      {/* Content */}
+      <div className="relative h-full flex items-center z-10">
+        <div className="w-full max-w-7xl mx-auto px-6 sm:px-10 lg:px-16">
           <AnimatePresence mode="wait">
-            <motion.div key={activeSlide.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.4, ease: 'easeOut' }} className="space-y-6">
-              <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-sm font-semibold text-emerald-50 backdrop-blur-sm">
-                <Sparkles className="h-4 w-4 text-amber-300" />
-                {activeSlide.eyebrow}
-              </div>
-              <div className="space-y-4">
-                <h1 className="max-w-xl font-sans text-[42px] font-black leading-[42px] text-white sm:text-[52px] sm:leading-[52px] lg:text-[60px] lg:leading-[60px]">{activeSlide.title}</h1>
-                <p className="max-w-lg text-lg text-emerald-50/90">{activeSlide.description}</p>
-              </div>
-              <div className="flex flex-col gap-3 sm:flex-row">
-                <Link href="/shop" className="inline-flex items-center justify-center rounded-full bg-white px-8 py-4 text-base font-semibold text-slate-900 transition hover:-translate-y-0.5 hover:bg-stone-100">{activeSlide.primaryCta}</Link>
-                <Link href="/shop" className={`inline-flex items-center justify-center gap-2 rounded-full px-6 py-4 text-base font-semibold transition ${isEmerald ? 'bg-white/12 text-white hover:bg-white/18' : 'bg-amber-400 text-slate-900 hover:bg-amber-300'}`}>
-                  <Tag className="h-4 w-4" />
-                  {activeSlide.secondaryCta}
+            <motion.div
+              key={idx + '-content'}
+              initial={{ opacity: 0, y: 28 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              transition={{ duration: 0.5 }}
+              className="max-w-xl"
+            >
+              <span className="inline-block bg-yellow-400 text-gray-900 text-xs font-black px-3 py-1.5 rounded-full mb-4 uppercase tracking-wide shadow">
+                {s.eyebrow}
+              </span>
+              <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black text-white leading-tight mb-3 drop-shadow-md">
+                {s.title}
+              </h1>
+              <p className="text-white/85 text-base sm:text-lg mb-6 leading-relaxed">{s.description}</p>
+              <div className="flex items-center gap-3 flex-wrap">
+                <Link href="/shop">
+                  <button type="button" className="bg-yellow-400 hover:bg-yellow-300 text-gray-900 font-black h-12 px-8 rounded-full shadow-lg text-sm transition-colors">
+                    {s.primaryCta} →
+                  </button>
                 </Link>
-              </div>
-              <div className="grid max-w-xl gap-3 sm:grid-cols-3">
-                {['Single-brand product story', 'Product-first shopping flow', 'Cleaner, easier browsing'].map((point) => (
-                  <div key={point} className="rounded-2xl bg-white/10 px-4 py-3 text-sm font-medium text-white/90 backdrop-blur-sm">{point}</div>
-                ))}
+                <span className="inline-block bg-white/20 backdrop-blur-sm text-white text-xs font-bold px-3 py-2 rounded-full border border-white/30">
+                  {s.secondaryCta}
+                </span>
               </div>
             </motion.div>
           </AnimatePresence>
-
-          <div className="relative min-h-[320px] sm:min-h-[380px] lg:min-h-[430px]">
-            <AnimatePresence mode="wait">
-              <motion.div key={activeSlide.id} initial={{ opacity: 0, scale: 0.96 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 1.02 }} transition={{ duration: 0.45, ease: 'easeOut' }} className="absolute inset-0 rounded-[2rem] bg-white/15 p-4 backdrop-blur-sm">
-                <div className="relative h-full overflow-hidden rounded-[1.75rem]">
-                  <img src={activeSlide.image} alt={activeSlide.title} className="h-full w-full object-cover" />
-                  <div className="absolute inset-0 bg-gradient-to-tr from-slate-950/35 via-transparent to-white/20" />
-                  <div className="absolute right-5 top-5 rounded-[1.5rem] bg-white/85 px-5 py-4 text-slate-900 shadow-soft backdrop-blur-sm">
-                    <p className="text-sm text-slate-500">Starting from</p>
-                    <p className="text-3xl font-black text-orange-500">{activeSlide.priceNote}</p>
-                  </div>
-                  <div className="absolute bottom-5 left-5 right-5 rounded-[1.5rem] bg-white/86 p-4 text-slate-900 backdrop-blur-sm">
-                    <p className="text-xs font-semibold uppercase tracking-[0.22em] text-emerald-600">Featured edit</p>
-                    <p className="mt-2 text-lg font-semibold">Clean silhouettes, warm pricing cues, and a simpler path to products.</p>
-                  </div>
-                </div>
-              </motion.div>
-            </AnimatePresence>
-          </div>
-        </div>
-
-        <div className="mt-8 flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            {heroSlides.map((slide, index) => (
-              <button key={slide.id} type="button" onClick={() => setActiveIndex(index)} className={`h-2.5 rounded-full transition ${index === activeIndex ? 'w-10 bg-white' : 'w-2.5 bg-white/35'}`} aria-label={`Go to slide ${index + 1}`} aria-pressed={index === activeIndex} />
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            <button type="button" onClick={() => setActiveIndex((current) => current === 0 ? heroSlides.length - 1 : current - 1)} className="focus-ring inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/12 text-white transition hover:bg-white/20" aria-label="Previous slide"><ArrowLeft className="h-5 w-5" /></button>
-            <button type="button" onClick={() => setActiveIndex((current) => (current + 1) % heroSlides.length)} className="focus-ring inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/12 text-white transition hover:bg-white/20" aria-label="Next slide"><ArrowRight className="h-5 w-5" /></button>
-          </div>
         </div>
       </div>
-    </section>
-  )
+
+      {/* Dot indicators */}
+      <div className="absolute bottom-5 left-1/2 -translate-x-1/2 flex gap-2 z-20">
+        {heroSlides.map((_, i) => (
+          <button
+            key={i}
+            type="button"
+            onClick={() => setIdx(i)}
+            className={`h-2 rounded-full transition-all duration-300 ${i === idx ? 'bg-yellow-400 w-7' : 'bg-white/50 w-2 hover:bg-white/80'}`}
+            aria-label={`Go to slide ${i + 1}`}
+          />
+        ))}
+      </div>
+
+      {/* Nav arrows */}
+      <button
+        type="button"
+        onClick={() => setIdx(i => (i - 1 + heroSlides.length) % heroSlides.length)}
+        className="absolute left-4 top-1/2 -translate-x-1 sm:translate-x-0 -translate-y-1/2 w-10 h-10 bg-black/30 hover:bg-black/50 text-white rounded-full flex items-center justify-center backdrop-blur-sm transition-colors z-20"
+        aria-label="Previous slide"
+      >
+        <ChevronLeft className="w-5 h-5" />
+      </button>
+      <button
+        type="button"
+        onClick={() => setIdx(i => (i + 1) % heroSlides.length)}
+        className="absolute right-4 top-1/2 translate-x-1 sm:translate-x-0 -translate-y-1/2 w-10 h-10 bg-black/30 hover:bg-black/50 text-white rounded-full flex items-center justify-center backdrop-blur-sm transition-colors z-20"
+        aria-label="Next slide"
+      >
+        <ChevronRight className="w-5 h-5" />
+      </button>
+    </div>
+  );
 }
