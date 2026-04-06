@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { loginApi, registerApi } from '../../api/authApi'
+import { loginApi, registerApi, getMeApi } from '../../api/authApi'
 
 export const loginUser = createAsyncThunk('auth/login', async (data, { rejectWithValue }) => {
     try {
@@ -18,6 +18,21 @@ export const registerUser = createAsyncThunk('auth/register', async (data, { rej
         return res.data
     } catch (err) {
         return rejectWithValue(err.response?.data?.message || 'Registration failed')
+    }
+})
+
+export const getCurrentUser = createAsyncThunk('auth/getCurrentUser', async (_, { rejectWithValue }) => {
+    try {
+        const res = await getMeApi()
+        return res.data
+    } catch (err) {
+        // Only logout if it's a 401 Unauthorized error
+        if (err.response?.status === 401) {
+            localStorage.removeItem('token')
+            return rejectWithValue('Session expired')
+        }
+        // For other errors (connection issues, timeouts), retain the token
+        return rejectWithValue(err.message || 'Failed to verify session')
     }
 })
 
@@ -63,6 +78,16 @@ const authSlice = createSlice({
             .addCase(registerUser.pending, pending)
             .addCase(registerUser.rejected, rejected)
             .addCase(registerUser.fulfilled, fulfilled)
+            .addCase(getCurrentUser.pending, pending)
+            .addCase(getCurrentUser.rejected, (state, action) => {
+                state.loading = false
+                state.error = action.payload
+                state.user = null
+                state.token = null
+                state.role = null
+                state.permissions = []
+            })
+            .addCase(getCurrentUser.fulfilled, fulfilled)
     },
 })
 

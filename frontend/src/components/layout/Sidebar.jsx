@@ -15,6 +15,8 @@ const allNavItems = [
     {
         section: 'Catalog',
         items: [
+            { label: 'Categories', path: '/admin/categories', icon: '📁', permission: 'categories.view' },
+            { label: 'Add Category', path: '/admin/categories/create', icon: '+', permission: 'categories.create' },
             { label: 'Products', path: '/admin/products', icon: '◈', permission: 'products.view' },
             { label: 'Add Product', path: '/admin/products/create', icon: '+', permission: 'products.create' },
         ],

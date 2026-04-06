@@ -10,6 +10,10 @@ const Role = mongoose.model('Role')
 const User = mongoose.model('User')
 
 const defaultPermissions = [
+    { name: 'categories.view', description: 'View categories' },
+    { name: 'categories.create', description: 'Create categories' },
+    { name: 'categories.edit', description: 'Edit categories' },
+    { name: 'categories.delete', description: 'Delete categories' },
     { name: 'products.view', description: 'View products' },
     { name: 'products.create', description: 'Create products' },
     { name: 'products.edit', description: 'Edit products' },
