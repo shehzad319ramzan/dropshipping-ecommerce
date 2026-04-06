@@ -7,16 +7,12 @@ const DashboardLayout = ({ children }) => {
     const [collapsed, setCollapsed] = useState(false)
 
     return (
-        <div style={{ display: 'flex', minHeight: '100vh', background: '#f8fafc' }}>
+        <div className="flex min-h-screen bg-slate-50 font-sans">
             <Sidebar collapsed={collapsed} setCollapsed={setCollapsed} />
-            <main style={{
-                marginLeft: collapsed ? 64 : 240,
-                transition: 'margin-left 0.25s ease',
-                flex: 1,
-                padding: '32px',
-                minHeight: '100vh',
-            }}>
-                {children}
+            <main className={`flex-1 transition-all duration-300 ease-in-out ${collapsed ? 'ml-20' : 'ml-64'} min-h-screen`}>
+                <div className="max-w-7xl mx-auto py-8 px-4 sm:px-6 lg:px-8">
+                    {children}
+                </div>
             </main>
         </div>
     )
