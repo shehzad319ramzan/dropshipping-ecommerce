@@ -19,7 +19,7 @@ export function RecentPurchaseToast() {
   const activePurchase = recentPurchases[activeIndex]
 
   return (
-    <div className="pointer-events-none fixed bottom-4 left-4 z-50 w-[calc(100vw-2rem)] max-w-[320px] sm:bottom-6 sm:left-6">
+    <div className="pointer-events-none fixed bottom-4 left-4 z-50 w-[calc(100vw-2rem)] max-w-[290px] sm:bottom-6 sm:left-6">
       <AnimatePresence mode="wait">
         <motion.div
           key={activePurchase.id}
@@ -27,16 +27,35 @@ export function RecentPurchaseToast() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 16 }}
           transition={{ duration: 0.28, ease: 'easeOut' }}
-          className="rounded-[1.25rem] border border-stone-200 bg-white/96 p-4 shadow-lift backdrop-blur dark:border-slate-800 dark:bg-slate-900/96"
+          className="overflow-hidden rounded-[1.1rem] border border-amber-100/80 bg-white/95 p-3 shadow-[0_16px_36px_rgba(15,23,42,0.12)] backdrop-blur dark:border-slate-700 dark:bg-slate-900/95"
           aria-live="polite"
         >
-          <div className="flex items-start gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-amber-100 text-amber-600 dark:bg-amber-400/15 dark:text-amber-300">
-              <ShoppingBag className="h-4 w-4" />
+          <div className="mb-2 flex items-center gap-2">
+            <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-bold uppercase tracking-[0.18em] text-emerald-700 dark:bg-emerald-500/10 dark:text-emerald-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+              Live Sale
+            </span>
+          </div>
+
+          <div className="flex items-start gap-2.5">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-amber-100 to-orange-100 text-amber-700 ring-1 ring-amber-200/80 dark:from-amber-400/20 dark:to-orange-400/10 dark:text-amber-300 dark:ring-amber-400/20">
+              <ShoppingBag className="h-3.5 w-3.5" />
             </div>
+
             <div className="min-w-0">
-              <p className="text-sm font-semibold text-slate-900 dark:text-slate-50">{activePurchase.customer} just bought {activePurchase.product}</p>
-              <p className="mt-1 text-sm text-slate-500 dark:text-slate-300">{activePurchase.location} · ${activePurchase.price} · {activePurchase.minutesAgo} min ago</p>
+              <p className="text-[13px] font-semibold leading-5 text-slate-900 dark:text-slate-50">
+                <span className="text-slate-700 dark:text-slate-200">{activePurchase.customer}</span>{' '}
+                bought{' '}
+                <span className="text-amber-700 dark:text-amber-300">{activePurchase.product}</span>
+              </p>
+
+              <div className="mt-1 flex flex-wrap items-center gap-1.5 text-[12px] text-slate-500 dark:text-slate-300">
+                <span>{activePurchase.location}</span>
+                <span className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-600" />
+                <span className="font-semibold text-slate-700 dark:text-slate-200">${activePurchase.price}</span>
+                <span className="h-1 w-1 rounded-full bg-slate-300 dark:bg-slate-600" />
+                <span>{activePurchase.minutesAgo} min ago</span>
+              </div>
             </div>
           </div>
         </motion.div>

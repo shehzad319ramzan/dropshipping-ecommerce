@@ -6,6 +6,12 @@ import { ArrowRight, Grid2X2, Heart, LayoutList, Leaf, SlidersHorizontal, Star }
 
 const PAGE_SIZE = 6
 
+function getSoldCountLabel(product) {
+  const seedSource = `${product.id}-${product.slug}-${product.price}`
+  const seed = Array.from(seedSource).reduce((total, char) => total + char.charCodeAt(0), 0)
+  return `${(seed % 50) + 10}K+ sold`
+}
+
 export function ShopCatalog({ products }) {
   const categories = useMemo(() => ['All Products', ...Array.from(new Set(products.map((product) => product.category)))], [products])
   const [selectedCategory, setSelectedCategory] = useState('All Products')
@@ -148,6 +154,7 @@ function ShopGridCard({ product }) {
   const discount = product.compareAtPrice
     ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
     : null
+  const soldCountLabel = getSoldCountLabel(product)
 
   return (
     <article className="group flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl hover:shadow-slate-200/50 bg-white rounded-lg dark:bg-slate-900 w-full border border-slate-100 dark:border-slate-800">
@@ -178,7 +185,7 @@ function ShopGridCard({ product }) {
             {product.compareAtPrice && (
               <span className="text-[11px] text-slate-400 line-through">${product.compareAtPrice.toFixed(2)}</span>
             )}
-            <span className="text-[11px] text-slate-500">{Math.floor(Math.random() * 50) + 10}K+ sold</span>
+            <span className="text-[11px] text-slate-500">{soldCountLabel}</span>
             {discount && (
               <span className="rounded border border-orange-400 px-1 py-[1px] text-[9px] font-bold leading-none text-orange-500">
                 -{discount}%

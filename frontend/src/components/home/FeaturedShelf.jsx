@@ -2,8 +2,13 @@
 
 import Link from 'next/link'
 import { ArrowRight, ShoppingCart, Star } from 'lucide-react'
-import { motion } from 'framer-motion'
 import { products } from '@/data/products'
+
+function getSoldCountLabel(product) {
+  const seedSource = `${product.id}-${product.slug}-${product.price}`
+  const seed = Array.from(seedSource).reduce((total, char) => total + char.charCodeAt(0), 0)
+  return `${(seed % 50) + 10}K+ sold`
+}
 
 export function FeaturedShelf() {
   const featured = products.slice(0, 4)
@@ -32,8 +37,8 @@ export function FeaturedShelf() {
         </div>
 
         <div className="grid gap-3 sm:gap-6 grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-          {featured.map((product, i) => (
-            <ProductShowcaseCard key={product.id} product={product} index={i} />
+          {featured.map((product) => (
+            <ProductShowcaseCard key={product.id} product={product} />
           ))}
         </div>
       </div>
@@ -41,10 +46,11 @@ export function FeaturedShelf() {
   )
 }
 
-function ProductShowcaseCard({ product, index }) {
+function ProductShowcaseCard({ product }) {
   const discount = product.compareAtPrice
     ? Math.round(((product.compareAtPrice - product.price) / product.compareAtPrice) * 100)
     : null
+  const soldCountLabel = getSoldCountLabel(product)
 
   return (
     <article className="group flex flex-col overflow-hidden transition-shadow duration-300 hover:shadow-xl hover:shadow-slate-200/50 bg-white rounded-lg dark:bg-slate-900 w-full">
@@ -65,7 +71,7 @@ function ProductShowcaseCard({ product, index }) {
             {product.compareAtPrice && (
               <span className="text-[11px] text-slate-400 line-through">${product.compareAtPrice.toFixed(2)}</span>
             )}
-            <span className="text-[11px] text-slate-500">{Math.floor(Math.random() * 50) + 10}K+ sold</span>
+            <span className="text-[11px] text-slate-500">{soldCountLabel}</span>
             {discount && (
               <span className="rounded border border-orange-400 px-1 py-[1px] text-[9px] font-bold leading-none text-orange-500">
                 -{discount}%
