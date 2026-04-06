@@ -5,12 +5,14 @@ import { useRouter } from 'next/navigation'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import useAuth from '../../hooks/useAuth'
 import { getCategoriesApi, deleteCategoryApi } from '../../api/categoryApi'
+import { syncCategoriesApi } from '../../api/cjApi'
 
 const CategoryList = () => {
     const router = useRouter()
     const { can, isAuthenticated, role } = useAuth()
     const [categories, setCategories] = useState([])
     const [loading, setLoading] = useState(true)
+    const [syncing, setSyncing] = useState(false)
     const [error, setError] = useState('')
 
     useEffect(() => {
@@ -35,6 +37,21 @@ const CategoryList = () => {
         }
     }
 
+    const handleSync = async () => {
+        if (!confirm('Sync categories from CJ Dropshipping? This might take a while.')) return
+        setSyncing(true)
+        setError('')
+        try {
+            const res = await syncCategoriesApi()
+            alert(res.data.message)
+            fetchCategories()
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to sync categories')
+        } finally {
+            setSyncing(false)
+        }
+    }
+
     const handleDelete = async (id) => {
         if (!confirm('Are you sure you want to delete this category?')) return
         try {
@@ -56,14 +73,25 @@ const CategoryList = () => {
             <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold text-slate-900">Categories</h1>
-                    {can('categories.create') && (
-                        <button
-                            onClick={() => router.push('/admin/categories/create')}
-                            className="bg-brand-primary text-white px-4 py-2 rounded-lg hover:bg-brand-primary-dark"
-                        >
-                            Add Category
-                        </button>
-                    )}
+                    <div className="flex gap-2">
+                        {can('categories.create') && (
+                            <button
+                                onClick={handleSync}
+                                disabled={syncing}
+                                className={`bg-brand-secondary text-white px-4 py-2 rounded-lg hover:bg-brand-secondary-dark disabled:opacity-50 flex items-center`}
+                            >
+                                {syncing ? 'Syncing...' : 'Sync from CJ'}
+                            </button>
+                        )}
+                        {can('categories.create') && (
+                            <button
+                                onClick={() => router.push('/admin/categories/create')}
+                                className="bg-brand-primary text-white px-4 py-2 rounded-lg hover:bg-brand-primary-dark"
+                            >
+                                Add Category
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 {error && <div className="text-red-600 mb-4">{error}</div>}

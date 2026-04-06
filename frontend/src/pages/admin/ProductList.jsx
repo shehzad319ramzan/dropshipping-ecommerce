@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import DashboardLayout from '../../components/layout/DashboardLayout'
 import useAuth from '../../hooks/useAuth'
 import { getProductsApi, deleteProductApi } from '../../api/productApi'
+import { syncProductsApi } from '../../api/cjApi'
 
 const ProductList = () => {
     const router = useRouter()
@@ -12,8 +13,10 @@ const ProductList = () => {
     const [products, setProducts] = useState([])
     const [pagination, setPagination] = useState({})
     const [loading, setLoading] = useState(true)
+    const [syncing, setSyncing] = useState(false)
     const [error, setError] = useState('')
     const [page, setPage] = useState(1)
+    const [syncKeyword, setSyncKeyword] = useState('hoodie')
 
     useEffect(() => {
         if (!isAuthenticated) {
@@ -38,6 +41,25 @@ const ProductList = () => {
         }
     }
 
+    const handleSync = async () => {
+        if (!syncKeyword) {
+            alert('Please enter a keyword to sync products')
+            return
+        }
+        if (!confirm(`Sync products from CJ for keyword: "${syncKeyword}"?`)) return
+        setSyncing(true)
+        setError('')
+        try {
+            const res = await syncProductsApi({ keyWord: syncKeyword })
+            alert(res.data.message)
+            fetchProducts()
+        } catch (err) {
+            setError(err.response?.data?.message || 'Failed to sync products')
+        } finally {
+            setSyncing(false)
+        }
+    }
+
     const handleDelete = async (id) => {
         if (!confirm('Are you sure you want to delete this product?')) return
         try {
@@ -59,14 +81,34 @@ const ProductList = () => {
             <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                     <h1 className="text-2xl font-bold text-slate-900">Products</h1>
-                    {can('products.create') && (
-                        <button
-                            onClick={() => router.push('/admin/products/create')}
-                            className="bg-brand-primary text-white px-4 py-2 rounded-lg hover:bg-brand-primary-dark"
-                        >
-                            Add Product
-                        </button>
-                    )}
+                    <div className="flex gap-2 items-center">
+                        {can('products.create') && (
+                            <div className="flex gap-2 items-center mr-4 border-r pr-4 border-slate-200">
+                                <input
+                                    type="text"
+                                    value={syncKeyword}
+                                    onChange={(e) => setSyncKeyword(e.target.value)}
+                                    placeholder="Sync keyword..."
+                                    className="border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary"
+                                />
+                                <button
+                                    onClick={handleSync}
+                                    disabled={syncing}
+                                    className="bg-brand-secondary text-white px-4 py-2 rounded-lg hover:bg-brand-secondary-dark disabled:opacity-50 text-sm"
+                                >
+                                    {syncing ? 'Syncing...' : 'Sync from CJ'}
+                                </button>
+                            </div>
+                        )}
+                        {can('products.create') && (
+                            <button
+                                onClick={() => router.push('/admin/products/create')}
+                                className="bg-brand-primary text-white px-4 py-2 rounded-lg hover:bg-brand-primary-dark"
+                            >
+                                Add Product
+                            </button>
+                        )}
+                    </div>
                 </div>
 
                 {error && <div className="text-red-600 mb-4">{error}</div>}
